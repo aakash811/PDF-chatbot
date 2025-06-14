@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 import gradio as gr
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
@@ -6,6 +7,8 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain.chains import RetrievalQA
 from langchain_groq import ChatGroq
 import time
+
+load_dotenv()
 
 # Global QA chain
 qa_chain = None
@@ -57,15 +60,18 @@ def answer_question(message, history):
 with gr.Blocks() as demo:
     gr.Markdown("## 📄 PDF Chatbot with LangChain + Gradio")
 
-    with gr.Row():
-        pdf_input = gr.File(label="Upload PDF", file_types=[".pdf"])
-        upload_button = gr.Button("Process PDF")
-    
+    with gr.Column():  # Makes both components the same height
+        with gr.Row():     # PDF upload takes 4 parts of space
+            pdf_input = gr.File(label="Upload PDF", file_types=[".pdf"])
+        with gr.Row():     # Button takes 1 part of space
+            upload_button = gr.Button("Process PDF")
+
     status_output = gr.Markdown()
 
     # Use generator function with `upload_button.click` to allow step-by-step updates
     upload_button.click(fn=set_pdf, inputs=[pdf_input], outputs=[status_output])
 
     gr.ChatInterface(fn=answer_question, title="💬 Ask your PDF")
+
 
 demo.launch()
