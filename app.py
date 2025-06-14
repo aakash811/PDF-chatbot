@@ -74,4 +74,5 @@ with gr.Blocks() as demo:
     gr.ChatInterface(fn=answer_question, title="💬 Ask your PDF")
 
 
-demo.launch()
+demo.launch(server_name="0.0.0.0", server_port=7860)
+
