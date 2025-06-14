@@ -1,3 +1,4 @@
+import os
 import gradio as gr
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
@@ -20,7 +21,7 @@ def load_pdf(file):
     retriever = vectorstore.as_retriever()
     
     llm = ChatGroq(
-        groq_api_key="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",
+        groq_api_key = os.getenv("GROQ_API_KEY"),
         model_name="llama3-8b-8192"
     )
 
